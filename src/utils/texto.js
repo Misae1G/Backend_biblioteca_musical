@@ -7,3 +7,6 @@ export const normalizarTexto = (texto = '') =>
         .toLowerCase()
         .replace(/\s+/g, ' ')
         .trim()
+        
+// Escapa caracteres especiales para usar texto del usuario dentro de una expresión regular
+export const escaparRegex = (texto = '') => String(texto).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

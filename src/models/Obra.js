@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import Carpeta from './Carpeta.js'
 import Catalogo from './Catalogo.js'
+import { normalizarTexto } from '../utils/texto.js'
 
 export const TIPOS_REGISTRO = ['original', 'adaptacion', 'mosaico']
 export const PROCEDENCIAS = ['ecuatoriana', 'universal']
@@ -30,6 +31,34 @@ const instrumentoSchema = new mongoose.Schema(
         },
     },
     { _id: false }
+)
+
+// Canciones que componen un mosaico (solo datos de texto, no son obras independientes)
+const cancionSchema = new mongoose.Schema(
+    {
+        orden: { type: Number, min: 1 }, // se asigna automáticamente según la posición
+        titulo: { ...texto(200), required: [true, 'El título de la canción es obligatorio'] },
+        compositor: texto(150),
+        observacion: texto(300),
+    },
+    { _id: false }
+)
+
+// Enlaces a documentos digitales (Drive, OneDrive, etc.)
+const documentoSchema = new mongoose.Schema(
+    {
+        nombre: { ...texto(150), required: [true, 'El nombre del documento es obligatorio'] },
+        tipoArchivo: texto(30),
+        enlace: {
+            type: String,
+            trim: true,
+            required: [true, 'El enlace es obligatorio'],
+            maxlength: [2000, 'El enlace es demasiado largo'],
+            match: [/^https?:\/\/\S+$/i, 'El enlace debe empezar por http:// o https://'],
+        },
+        observaciones: texto(300),
+    },
+    { timestamps: false }
 )
 
 const obraSchema = new mongoose.Schema(
@@ -77,9 +106,18 @@ const obraSchema = new mongoose.Schema(
         // Adaptaciones: apunta a la obra original
         obraOriginal: { type: mongoose.Schema.Types.ObjectId, ref: 'Obra' },
 
+        // Mosaicos: canciones en orden
+        canciones: { type: [cancionSchema], default: [] },
+
+        // Documentos digitales
+        documentos: { type: [documentoSchema], default: [] },
+
         // Disponibilidad física (se recalcula desde préstamos e interpretaciones)
         prestadaFisicamente: { type: Boolean, default: false },
         enInterpretacion: { type: Boolean, default: false },
+
+        // Texto normalizado para búsquedas (se calcula solo)
+        busqueda: { type: String, select: false },
 
         // Control
         activa: { type: Boolean, default: true },
@@ -152,12 +190,41 @@ obraSchema.pre('validate', async function () {
             }
         })
     }
+
+    // Mosaico: debe tener canciones; las demás obras no pueden tenerlas
+    if (this.tipoRegistro === 'mosaico') {
+        if (!this.canciones?.length) {
+            this.invalidate('canciones', 'Un mosaico debe tener al menos una canción')
+        }
+    } else if (this.canciones?.length) {
+        this.invalidate('canciones', 'Solo los mosaicos pueden tener canciones')
+    }
+
+    // El orden de las canciones es siempre su posición en la lista
+    this.canciones.forEach((cancion, n) => {
+        cancion.orden = n + 1
+    })
+
+    // Campo de búsqueda: título, autor, arreglista, orquestador, opus y canciones del mosaico
+    this.busqueda = normalizarTexto(
+        [
+            this.titulo,
+            this.autor,
+            this.arreglista,
+            this.orquestador,
+            this.opus,
+            ...this.canciones.flatMap((c) => [c.titulo, c.compositor]),
+        ]
+            .filter(Boolean)
+            .join(' ')
+    )
 })
 
 obraSchema.set('toJSON', {
     virtuals: true,
     transform: (doc, ret) => {
         delete ret.__v
+        delete ret.busqueda
         return ret
     },
 })
