@@ -15,7 +15,7 @@ const limpiar = () =>
     Usuario.deleteMany({ $or: [{ correo: correoPrueba }, { nombreUsuario: usuarioPrueba }] })
 
 const ejecutar = async () => {
-    await mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+    await mongoose.connect(process.env.MONGODB_URI)
     await Usuario.init() // crea los índices antes de probar
     await limpiar()
 

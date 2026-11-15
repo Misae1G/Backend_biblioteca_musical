@@ -21,7 +21,7 @@ const falla = async (datos, codigo) => {
 }
 
 const ejecutar = async () => {
-    await mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+    await mongoose.connect(process.env.MONGODB_URI)
     await Catalogo.init()
     await limpiar()
 

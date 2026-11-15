@@ -30,7 +30,7 @@ const falla = async (datos, campo) => {
 }
 
 const ejecutar = async () => {
-    await mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+    await mongoose.connect(process.env.MONGODB_URI)
     await Interpretacion.init()
     await limpiar()
 

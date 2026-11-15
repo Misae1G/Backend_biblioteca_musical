@@ -8,7 +8,7 @@ const contadorSchema = new mongoose.Schema(
     { versionKey: false }
 )
 
-const Contador = mongoose.model('Contador', contadorSchema)
+const Contador = mongoose.model('Contador', contadorSchema, 'contadores')
 
 // Devuelve el siguiente código: generarCodigo('prestamo', 'PRE') -> 'PRE-0001'
 export const generarCodigo = async (nombre, prefijo, digitos = 4) => {

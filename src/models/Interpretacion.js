@@ -71,4 +71,4 @@ interpretacionSchema.set('toJSON', {
     },
 })
 
-export default mongoose.model('Interpretacion', interpretacionSchema)
+export default mongoose.model('Interpretacion', interpretacionSchema, 'interpretaciones')

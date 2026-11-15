@@ -69,4 +69,4 @@ auditoriaSchema.set('toJSON', {
     },
 })
 
-export default mongoose.model('Auditoria', auditoriaSchema)
+export default mongoose.model('Auditoria', auditoriaSchema, 'auditoria')

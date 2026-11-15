@@ -31,7 +31,7 @@ const bloquea = async (operacion) => {
 }
 
 const ejecutar = async () => {
-    await mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+    await mongoose.connect(process.env.MONGODB_URI)
     await Auditoria.init()
     await limpiar()
 

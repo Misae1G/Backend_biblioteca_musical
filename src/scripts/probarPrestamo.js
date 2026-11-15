@@ -54,7 +54,7 @@ const devolucionFalla = async (prestamo, devolucion, campo) => {
 }
 
 const ejecutar = async () => {
-    await mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+    await mongoose.connect(process.env.MONGODB_URI)
     await Prestamo.init()
     await limpiar()
 
