@@ -1,34 +1,26 @@
-// Requerir módulos
 import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors';
+import cors from 'cors'
+import helmet from 'helmet'
+import cookieParser from 'cookie-parser'
+import config from './config/env.js'
+import { rutaNoEncontrada, manejarErrores } from './middlewares/errores.js'
 
-
-
-// Inicializaciones
 const app = express()
-dotenv.config()
 
+// Configuraciones
+app.set('port', config.puerto)
 
-// Configuraciones 
+// Middlewares
+app.use(helmet())
+app.use(cors({ origin: config.frontendUrl, credentials: true }))
+app.use(express.json({ limit: '1mb' }))
+app.use(cookieParser())
 
+// Rutas
+app.get('/api/salud', (req, res) => res.json({ ok: true }))
 
+// Rutas no encontradas y errores (siempre al final)
+app.use(rutaNoEncontrada)
+app.use(manejarErrores)
 
-// Middlewares 
-app.use(express.json())
-app.use(cors())
-
-
-
-// Variables globales
-app.set('port',process.env.PORT || 3000)
-
-
-
-// Rutas 
-app.get('/',(req,res)=> res.send("Server on"))
-
-
-
-// Exportar la instancia de express por medio de app
-export default  app
+export default app
