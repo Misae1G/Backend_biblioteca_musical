@@ -20,6 +20,14 @@ const config = {
     jwtSecret: process.env.JWT_SECRET,
     jwtExpira: process.env.JWT_EXPIRES_IN || '8h',
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+    smtp: {
+        host: process.env.SMTP_HOST,
+        puerto: Number(process.env.SMTP_PORT) || 465,
+        usuario: process.env.SMTP_USER,
+        clave: process.env.SMTP_PASS,
+        remitente: process.env.MAIL_FROM || process.env.SMTP_USER,
+        configurado: Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
+    },
 }
 
 export default config

@@ -45,6 +45,7 @@ const usuarioSchema = new mongoose.Schema(
         activo: { type: Boolean, default: true },
         debeCambiarPassword: { type: Boolean, default: true },
         ultimoAcceso: { type: Date },
+        passwordCambiadaEn: { type: Date },
         // Recuperación de contraseña (solo administradores)
         codigoRecuperacion: { type: String, select: false },
         codigoRecuperacionExpira: { type: Date, select: false },
@@ -68,6 +69,7 @@ usuarioSchema.pre('validate', async function () {
 usuarioSchema.pre('save', async function () {
     if (!this.isModified('password')) return
     this.password = await bcrypt.hash(this.password, 12)
+    this.passwordCambiadaEn = new Date()
 })
 
 // Comparar contraseña (requiere haber cargado el campo con .select('+password'))
@@ -81,6 +83,7 @@ usuarioSchema.set('toJSON', {
         delete ret.password
         delete ret.codigoRecuperacion
         delete ret.codigoRecuperacionExpira
+        delete ret.passwordCambiadaEn
         delete ret.__v
         return ret
     },
