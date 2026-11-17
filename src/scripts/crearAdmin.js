@@ -1,17 +1,11 @@
 import 'dotenv/config'
-import crypto from 'node:crypto'
 import mongoose from 'mongoose'
 import Usuario from '../models/Usuario.js'
+import { generarPasswordTemporal } from '../utils/password.js'
 
 const leerArgumento = (nombre) => {
     const i = process.argv.indexOf(`--${nombre}`)
     return i !== -1 ? process.argv[i + 1] : undefined
-}
-
-// Alfabeto sin caracteres ambiguos (0/O, 1/l/I)
-const generarPasswordTemporal = (largo = 12) => {
-    const alfabeto = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'
-    return Array.from({ length: largo }, () => alfabeto[crypto.randomInt(alfabeto.length)]).join('')
 }
 
 const ejecutar = async () => {
