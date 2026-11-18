@@ -12,7 +12,8 @@
     "crear:admin": "node src/scripts/crearAdmin.js",
     "test:auth": "node src/scripts/probarAuth.js",
     "test:usuarios": "node src/scripts/probarUsuarios.js",
-    "test:catalogos": "node src/scripts/probarCatalogos.js"
+    "test:catalogos": "node src/scripts/probarCatalogos.js",
+    "test:obras": "node src/scripts/probarObras.js"
   },
   "keywords": [],
   "author": "",

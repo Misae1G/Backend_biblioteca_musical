@@ -92,15 +92,15 @@ const ejecutar = async () => {
         verificar('El campo de búsqueda no se devuelve en consultas normales', recargado.busqueda === undefined)
         verificar('El campo de búsqueda no sale en JSON', !('busqueda' in recargado.toJSON()))
         verificar('Encuentra el mosaico por texto parcial ("navi")',
-            (await buscar('navi')).some((o) => o.id === mosaico.id))
+            (await buscar('navi')).some((o) => o._id.equals(mosaico._id)))
         verificar('Encuentra el mosaico por el título de una canción, sin tildes ("pequena serenata")',
-            (await buscar('pequena serenata')).some((o) => o.id === mosaico.id))
+            (await buscar('pequena serenata')).some((o) => o._id.equals(mosaico._id)))
         verificar('Encuentra el mosaico con mayúsculas y tildes ("PEQUEÑA")',
-            (await buscar('PEQUEÑA')).some((o) => o.id === mosaico.id))
+            (await buscar('PEQUEÑA')).some((o) => o._id.equals(mosaico._id)))
         verificar('Encuentra el mosaico por el compositor de una canción ("mozart")',
-            (await buscar('mozart')).some((o) => o.id === mosaico.id))
+            (await buscar('mozart')).some((o) => o._id.equals(mosaico._id)))
         verificar('Encuentra una obra normal por su autor',
-            (await buscar('autor de prueba')).some((o) => o.id === conDocs.id))
+            (await buscar('autor de prueba')).some((o) => o._id.equals(conDocs._id)))
         verificar('No encuentra un término inexistente', (await buscar('zzzxyz')).length === 0)
 
         let sinError = true
