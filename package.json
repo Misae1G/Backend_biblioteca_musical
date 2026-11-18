@@ -13,7 +13,8 @@
     "test:auth": "node src/scripts/probarAuth.js",
     "test:usuarios": "node src/scripts/probarUsuarios.js",
     "test:catalogos": "node src/scripts/probarCatalogos.js",
-    "test:obras": "node src/scripts/probarObras.js"
+    "test:obras": "node src/scripts/probarObras.js",
+    "test:prestamos": "node src/scripts/probarPrestamos.js"
   },
   "keywords": [],
   "author": "",
