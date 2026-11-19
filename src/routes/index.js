@@ -20,5 +20,4 @@ router.use('/prestamos', prestamosRoutes)
 router.use('/interpretaciones', interpretacionesRoutes)
 
 
-
 export default router
