@@ -15,7 +15,9 @@
     "test:catalogos": "node src/scripts/probarCatalogos.js",
     "test:obras": "node src/scripts/probarObras.js",
     "test:prestamos": "node src/scripts/probarPrestamos.js",
-    "test:interpretaciones": "node src/scripts/probarInterpretaciones.js"
+    "test:interpretaciones": "node src/scripts/probarInterpretaciones.js",
+    "test:exportacion": "node src/scripts/probarExportacion.js",
+    "test:reportes": "node src/scripts/probarReportes.js"
   },
   "keywords": [],
   "author": "",
@@ -25,12 +27,14 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^18.0.10",
+    "exceljs": "^4.4.0",
     "express": "^5.3.0",
     "express-rate-limit": "^8.7.4",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.12.1",
     "nodemailer": "^10.5.0",
+    "pdfmake": "^0.3.14",
     "zod": "^4.6.7"
   }
 }
