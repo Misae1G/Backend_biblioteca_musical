@@ -1,33 +1,9 @@
 import { z } from 'zod'
 import { TIPOS_ENTREGA, ESTADOS_PRESTAMO, ESTADOS_FISICOS } from '../models/Prestamo.js'
-import {
-    vacioSiFalta, vacioAUndefined, textoOpcional, opcion, opcionObligatoria, idOpcional, paginacion,
-} from './comunes.js'
+import { vacioSiFalta, textoOpcional, opcion, opcionObligatoria, idOpcional, paginacion } from './comunes.js'
+import { fechaObligatoria, fechaOpcional } from './fechas.js'
 
 const ID = /^[a-f0-9]{24}$/i
-
-// "2026-11-18" -> Date a medianoche UTC (se rechazan días que no existen, como 2026-02-31)
-const aFecha = (texto) => {
-    const fecha = new Date(`${texto}T00:00:00.000Z`)
-    return Number.isNaN(fecha.getTime()) || fecha.toISOString().slice(0, 10) !== texto ? null : fecha
-}
-
-const fechaObligatoria = (mensaje) =>
-    z.preprocess(
-        vacioSiFalta,
-        z.string().trim()
-            .min(1, mensaje)
-            .refine((v) => /^\d{4}-\d{2}-\d{2}$/.test(v) && aFecha(v), 'La fecha debe tener el formato AAAA-MM-DD y existir')
-            .transform((v) => aFecha(v))
-    )
-
-const fechaOpcional = z.preprocess(
-    vacioAUndefined,
-    z.string().trim()
-        .refine((v) => /^\d{4}-\d{2}-\d{2}$/.test(v) && aFecha(v), 'La fecha debe tener el formato AAAA-MM-DD y existir')
-        .transform((v) => aFecha(v))
-        .optional()
-)
 
 const requerido = (mensaje, max) =>
     z.preprocess(vacioSiFalta, z.string().trim().min(1, mensaje).max(max, `No puede superar ${max} caracteres`))

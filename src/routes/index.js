@@ -5,6 +5,8 @@ import carpetasRoutes from './carpetas.routes.js'
 import catalogosRoutes from './catalogos.routes.js'
 import obrasRoutes from './obras.routes.js'
 import prestamosRoutes from './prestamos.routes.js'
+import interpretacionesRoutes from './interpretaciones.routes.js'
+
 
 const router = Router()
 
@@ -15,6 +17,8 @@ router.use('/carpetas', carpetasRoutes)
 router.use('/catalogos', catalogosRoutes)
 router.use('/obras', obrasRoutes)
 router.use('/prestamos', prestamosRoutes)
+router.use('/interpretaciones', interpretacionesRoutes)
+
 
 
 export default router

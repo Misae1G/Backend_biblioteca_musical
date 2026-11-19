@@ -14,7 +14,8 @@
     "test:usuarios": "node src/scripts/probarUsuarios.js",
     "test:catalogos": "node src/scripts/probarCatalogos.js",
     "test:obras": "node src/scripts/probarObras.js",
-    "test:prestamos": "node src/scripts/probarPrestamos.js"
+    "test:prestamos": "node src/scripts/probarPrestamos.js",
+    "test:interpretaciones": "node src/scripts/probarInterpretaciones.js"
   },
   "keywords": [],
   "author": "",
