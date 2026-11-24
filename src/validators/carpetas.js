@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { vacioSiFalta, textoOpcional, opcion, estadoBooleano, paginacion } from './comunes.js'
+import { fechaOpcional } from './fechas.js'
 
 export const carpetaSchema = z.object({
     numero: z.preprocess(
@@ -10,6 +11,8 @@ export const carpetaSchema = z.object({
             .regex(/^[A-Za-z0-9-]+$/, 'El número de carpeta solo admite letras, números y guion')
     ),
     ubicacionFisica: textoOpcional(150),
+    ultimaRevision: fechaOpcional,
+    revisadaPor: textoOpcional(100),
     observaciones: textoOpcional(500),
 })
 

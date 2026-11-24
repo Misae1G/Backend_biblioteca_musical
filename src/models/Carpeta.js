@@ -16,6 +16,13 @@ const carpetaSchema = new mongoose.Schema(
             trim: true,
             maxlength: [150, 'La ubicación no puede superar 150 caracteres'],
         },
+        // Última revisión física de la carpeta (dato del catálogo original)
+        ultimaRevision: { type: Date },
+        revisadaPor: {
+            type: String,
+            trim: true,
+            maxlength: [100, 'El nombre de quien revisó no puede superar 100 caracteres'],
+        },
         observaciones: {
             type: String,
             trim: true,

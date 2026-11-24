@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { TIPOS_REGISTRO, PROCEDENCIAS } from '../models/Obra.js'
+import { TIPOS_REGISTRO, PROCEDENCIAS, FACTIBLE_SIN_VOZ } from '../models/Obra.js'
 import {
     vacioSiFalta, vacioAUndefined, textoOpcional, opcion, opcionObligatoria,
     idOpcional, estadoBooleano, paginacion,
@@ -44,6 +44,7 @@ const instrumentoSchema = z.object({
 const cancionSchema = z.object({
     titulo: requerido('El título de cada canción es obligatorio', 200),
     compositor: textoOpcional(150),
+    genero: textoOpcional(100),
     observacion: textoOpcional(300),
 })
 
@@ -72,6 +73,14 @@ export const obraSchema = z.object({
     tiempo: textoOpcional(50),
     duracion: entero('La duración debe ser un número entero de segundos (0 a 86400)', 0, 86400),
     numeroMovimientos: entero('El número de movimientos debe ser un entero entre 1 y 50', 1, 50),
+    edicion: textoOpcional(150),
+    formato: textoOpcional(150),
+    detalleMaterial: textoOpcional(200),
+    estadoMaterial: textoOpcional(150),
+    factibleSinVoz: opcion(FACTIBLE_SIN_VOZ, 'El valor de «factible sin voz» no es válido'),
+    directorConcierto: textoOpcional(150),
+    solistaConcierto: textoOpcional(150),
+    requiereRevision: z.preprocess(vacioAUndefined, z.boolean('Indica si requiere revisión (true o false)').optional()),
     carpeta: idObligatorio('La carpeta es obligatoria'),
     observaciones: textoOpcional(1000),
     obraOriginal: idOpcional,
@@ -107,5 +116,6 @@ export const listarObrasSchema = z.object({
     disponibilidad: opcion(DISPONIBILIDADES, 'La disponibilidad no es válida'),
     activa: opcion(['true', 'false', 'todas'], 'El estado no es válido'),
     pendienteDeCompletar: opcion(['true', 'false'], 'El valor no es válido'),
+    requiereRevision: opcion(['true', 'false'], 'El valor no es válido'),
     ...paginacion,
 })

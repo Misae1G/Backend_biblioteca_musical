@@ -54,9 +54,9 @@ export const obtener = async (id) => {
 
 export const crear = (datos) => conMensajeDuplicado(MSG_DUPLICADO, () => Carpeta.create(datos))
 
-export const editar = async (id, { numero, ubicacionFisica, observaciones }) => {
+export const editar = async (id, { numero, ubicacionFisica, ultimaRevision, revisadaPor, observaciones }) => {
     const carpeta = await buscar(id)
-    carpeta.set({ numero, ubicacionFisica, observaciones }) // un campo opcional ausente se borra
+    carpeta.set({ numero, ubicacionFisica, ultimaRevision, revisadaPor, observaciones }) // un campo opcional ausente se borra
     await conMensajeDuplicado(MSG_DUPLICADO, () => carpeta.save())
     return carpeta
 }

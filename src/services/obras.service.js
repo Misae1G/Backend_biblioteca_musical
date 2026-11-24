@@ -12,6 +12,7 @@ const CAMPOS = [
     'titulo', 'tipoRegistro', 'autor', 'arreglista', 'orquestador', 'opus',
     'anioComposicion', 'anioArreglo', 'tipoObra', 'procedencia', 'agrupacion',
     'instrumentacion', 'tonalidad', 'compas', 'tiempo', 'duracion', 'numeroMovimientos',
+    'edicion', 'formato', 'detalleMaterial', 'estadoMaterial', 'factibleSinVoz', 'directorConcierto', 'solistaConcierto', 'requiereRevision',
     'carpeta', 'observaciones', 'obraOriginal', 'canciones',
 ]
 
@@ -47,7 +48,7 @@ const POPULATE_FICHA = [
 
 const CAMPOS_LISTA =
     'titulo autor arreglista orquestador tipoRegistro procedencia carpeta tipoObra agrupacion ' +
-    'prestadaFisicamente enInterpretacion activa pendienteDeCompletar canciones'
+    'prestadaFisicamente enInterpretacion activa pendienteDeCompletar requiereRevision canciones'
 
 const extraerCampos = (datos) => {
     const campos = Object.fromEntries(CAMPOS.map((c) => [c, datos[c]]))
@@ -125,7 +126,7 @@ const titulo = (obra) => recortar(obra.titulo, 120)
 export const listar = async (params) => {
     const {
         q, carpeta, tipoObra, agrupacion, instrumento, familia, procedencia, tipoRegistro,
-        disponibilidad, activa = 'true', pendienteDeCompletar, pagina, limite,
+        disponibilidad, activa = 'true', pendienteDeCompletar, requiereRevision, pagina, limite,
     } = params
 
     const vacio = { obras: [], total: 0, pagina, paginas: 0 }
@@ -133,6 +134,7 @@ export const listar = async (params) => {
 
     if (activa !== 'todas') filtro.activa = activa === 'true'
     if (pendienteDeCompletar) filtro.pendienteDeCompletar = pendienteDeCompletar === 'true'
+    if (requiereRevision) filtro.requiereRevision = requiereRevision === 'true'
     if (procedencia) filtro.procedencia = procedencia
     if (tipoRegistro) filtro.tipoRegistro = tipoRegistro
     if (tipoObra) filtro.tipoObra = tipoObra

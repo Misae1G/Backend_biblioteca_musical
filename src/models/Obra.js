@@ -5,6 +5,7 @@ import { normalizarTexto } from '../utils/texto.js'
 
 export const TIPOS_REGISTRO = ['original', 'adaptacion', 'mosaico']
 export const PROCEDENCIAS = ['ecuatoriana', 'universal']
+export const FACTIBLE_SIN_VOZ = ['si', 'no']
 
 const anioMaximo = () => new Date().getFullYear() + 1
 
@@ -39,6 +40,7 @@ const cancionSchema = new mongoose.Schema(
         orden: { type: Number, min: 1 }, // se asigna automáticamente según la posición
         titulo: { ...texto(200), required: [true, 'El título de la canción es obligatorio'] },
         compositor: texto(150),
+        genero: texto(100), // p. ej. "Aria de ópera - Soprano"
         observacion: texto(300),
     },
     { _id: false }
@@ -99,6 +101,20 @@ const obraSchema = new mongoose.Schema(
             validate: { validator: Number.isInteger, message: 'Debe ser un número entero' },
         },
 
+        // Edición y estado del material (datos del catálogo original)
+        edicion: texto(150),
+        formato: texto(150), // formato o instrumentación de esta versión (p. ej. "Orquesta de cuerdas")
+        detalleMaterial: texto(200),
+        estadoMaterial: texto(150), // p. ej. "Completo", "Falta parte de coro"
+        factibleSinVoz: {
+            type: String,
+            enum: { values: FACTIBLE_SIN_VOZ, message: 'El valor de «factible sin voz» no es válido' },
+        },
+
+        // Datos históricos de conciertos (texto libre del catálogo original; las interpretaciones nuevas van en su módulo)
+        directorConcierto: texto(150),
+        solistaConcierto: texto(150),
+
         // Ubicación
         carpeta: { type: mongoose.Schema.Types.ObjectId, ref: 'Carpeta', required: [true, 'La carpeta es obligatoria'] },
         observaciones: texto(1000),
@@ -122,6 +138,7 @@ const obraSchema = new mongoose.Schema(
         // Control
         activa: { type: Boolean, default: true },
         pendienteDeCompletar: { type: Boolean, default: false },
+        requiereRevision: { type: Boolean, default: false }, // marcada «revisar» en el catálogo original
         creadaPor: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
         modificadaPor: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
     },
@@ -132,6 +149,7 @@ obraSchema.index({ carpeta: 1 })
 obraSchema.index({ obraOriginal: 1 })
 obraSchema.index({ tipoRegistro: 1 })
 obraSchema.index({ pendienteDeCompletar: 1 })
+obraSchema.index({ requiereRevision: 1 })
 
 // Los cuatro estados salen de combinar los dos indicadores
 obraSchema.virtual('estadoDisponibilidad').get(function () {
@@ -191,9 +209,10 @@ obraSchema.pre('validate', async function () {
         })
     }
 
-    // Mosaico: debe tener canciones; las demás obras no pueden tenerlas
+    // Mosaico: debe tener canciones (salvo si está pendiente de completar, p. ej. al migrar el catálogo original);
+    // las demás obras no pueden tenerlas
     if (this.tipoRegistro === 'mosaico') {
-        if (!this.canciones?.length) {
+        if (!this.canciones?.length && !this.pendienteDeCompletar) {
             this.invalidate('canciones', 'Un mosaico debe tener al menos una canción')
         }
     } else if (this.canciones?.length) {
