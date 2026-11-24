@@ -17,7 +17,10 @@
     "test:prestamos": "node src/scripts/probarPrestamos.js",
     "test:interpretaciones": "node src/scripts/probarInterpretaciones.js",
     "test:exportacion": "node src/scripts/probarExportacion.js",
-    "test:reportes": "node src/scripts/probarReportes.js"
+    "test:reportes": "node src/scripts/probarReportes.js",
+    "test:camposNuevos": "node src/scripts/probarCamposNuevos.js",
+    "importar": "node src/scripts/importarBiblioteca.js",
+    "verificar:importacion": "node src/scripts/verificarImportacion.js"
   },
   "keywords": [],
   "author": "",
