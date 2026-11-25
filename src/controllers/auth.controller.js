@@ -9,7 +9,7 @@ import { enviarCorreo, correoRecuperacion } from '../utils/correo.js'
 // Hash de relleno: el tiempo de respuesta no revela si el usuario existe
 const HASH_RELLENO = bcrypt.hashSync('relleno-no-usar', 12)
 
-const MINUTOS_CODIGO = 30
+const MINUTOS_CODIGO = 15
 const MENSAJE_RECUPERAR =
     'Si el correo pertenece a un administrador activo, recibirás un mensaje con las instrucciones'
 
